@@ -9,16 +9,6 @@ ARG POSTGRES_VERSION=17
 
 WORKDIR /var/www/html
 
-COPY ./. ./.
-
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
-    php -r "if (hash_file('sha384', 'composer-setup.php') === 'dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6') { echo 'Installer verified'.PHP_EOL; } else { echo 'Installer corrupt'.PHP_EOL; unlink('composer-setup.php'); exit(1); }" && \
-    php composer-setup.php && \
-    php -r "unlink('composer-setup.php');" \
-    mv composer.phar /usr/local/bin/composer
-
-RUN composer install
-
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=UTC
 ENV SUPERVISOR_PHP_COMMAND="/usr/bin/php -d variables_order=EGPCS /var/www/html/artisan serve --host=0.0.0.0 --port=80"
@@ -71,9 +61,13 @@ RUN userdel -r ubuntu
 RUN groupadd --force -g $WWWGROUP sail
 RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 sail
 
-COPY start-container /usr/local/bin/start-container
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY php.ini /etc/php/8.4/cli/conf.d/99-sail.ini
+COPY ./. ./.
+
+RUN composer install
+
+COPY ./.deploy/start-container /usr/local/bin/start-container
+COPY ./.deploy/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY ./.deploy/php.ini /etc/php/8.4/cli/conf.d/99-sail.ini
 RUN chmod +x /usr/local/bin/start-container
 
 EXPOSE 80/tcp
