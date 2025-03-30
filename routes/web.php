@@ -13,3 +13,13 @@ Route::get('/review/test', [ReviewController::class, 'sync']);
 Route::get('test-tg', function () {
    echo Telegram::getMe();
 });
+
+Route::post(env('TELEGRAM_BOT_TOKEN', 'YOUR-BOT-TOKEN') . "/webhook", function () {
+    $update = Telegram::commandsHandler(true);
+
+    // Commands handler method returns the Update object.
+    // So you can further process $update object
+    // to however you want.
+
+    return 'ok';
+});

@@ -1,42 +1,56 @@
 services:
-    nginx:
-        container_name: "nitrino-nginx"
-        restart: unless-stopped
+    laravel.test:
         build:
-            context: .
-            dockerfile: .deploy/nginx/nginx.prod.dockerfile
+            context: './vendor/laravel/sail/runtimes/8.4'
+            dockerfile: Dockerfile
+            args:
+                WWWGROUP: '${WWWGROUP}'
+        image: 'sail-8.4/app'
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
         ports:
-            - 80:80
+            - '${APP_PORT:-80}:80'
+            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
         environment:
-            - NGINX_HOST=local.nitrino.com
-            - NGINX_PORT=80
-        links:
-            - php
+            WWWUSER: '${WWWUSER}'
+            LARAVEL_SAIL: 1
+            XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
+            XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
+            IGNITION_LOCAL_SITES_PATH: '${PWD}'
         volumes:
-            - ./www/storage/app:/var/www/public/storage:ro
-            - ./logs:/var/log/nginx
-
-    php:
-        container_name: "nitrino-php"
-        restart: unless-stopped
-        build:
-          context: .
-          dockerfile: .deploy/php/php.prod.Dockerfile
-        volumes:
-          - ./www/storage:/var/www/storage
-          - ./www/.env:/var/www/.env
-        links:
-            - db
-
-    db:
-        image: postgres:15.1
-        container_name: "nitrino-pgsql"
-        restart: unless-stopped
+            - '.:/var/www/html'
+        networks:
+            - sail
+        depends_on:
+            - pgsql
+    pgsql:
+        image: 'postgres:17'
         ports:
-            - 5432:5432
+            - '${FORWARD_DB_PORT:-5432}:5432'
         environment:
-            POSTGRES_DB: "nitrino"
-            POSTGRES_USER: "root"
-            POSTGRES_PASSWORD: "root"
+            PGPASSWORD: '${DB_PASSWORD:-secret}'
+            POSTGRES_DB: '${DB_DATABASE}'
+            POSTGRES_USER: '${DB_USERNAME}'
+            POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
         volumes:
-            - ./pgsql-volume:/var/lib/postgresql/data
+            - 'sail-pgsql2:/var/lib/postgresql/data'
+            - './vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
+        networks:
+            - sail
+        healthcheck:
+            test:
+                - CMD
+                - pg_isready
+                - '-q'
+                - '-d'
+                - '${DB_DATABASE}'
+                - '-U'
+                - '${DB_USERNAME}'
+            retries: 3
+            timeout: 5s
+networks:
+    sail:
+        driver: bridge
+volumes:
+    sail-pgsql2:
+        driver: local
