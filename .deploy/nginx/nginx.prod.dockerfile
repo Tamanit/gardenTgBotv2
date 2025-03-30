@@ -9,7 +9,7 @@ RUN npm install && npm run build
 
 FROM nginx:alpine
 
-ADD nginx.prod.conf /etc/nginx/conf.d/default.conf
+ADD .deploy/nginx/nginx.prod.conf /etc/nginx/conf.d/default.conf
 
 # Копируем только собранный клиент, папка node_modules больше не нужна
 COPY --from=node /var/www/public /var/www/public
