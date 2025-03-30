@@ -2,7 +2,7 @@ FROM node:20-alpine AS node
 
 WORKDIR /var/www
 
-COPY ../.. ./
+COPY ./. ./
 
 # Устанавливаем зависимости и собираем front-end
 RUN npm install && npm run build
