@@ -13,7 +13,6 @@ ADD .deploy/nginx/nginx.prod.conf /etc/nginx/conf.d/default.conf
 
 # Копируем только собранный клиент, папка node_modules больше не нужна
 COPY --from=node /var/www/public /var/www/public
-RUN mkdir -p /var/www/public/
 
 WORKDIR /var/www/public
 
