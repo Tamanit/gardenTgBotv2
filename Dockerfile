@@ -20,6 +20,6 @@ WORKDIR /app
 
 RUN composer install
 
-CMD php artisan serve --host=gardenbot-app.tamanit.ru --port=80
+CMD php artisan serv --port=8000
 
-EXPOSE 80
+EXPOSE 8000
