@@ -36,7 +36,7 @@ RUN apk add \
         imagemagick
 
 # Устанавливаем конфиг для php
-ADD php.prod.ini /usr/local/etc/php/php.ini
+ADD .deploy/php/php.prod.ini /usr/local/etc/php/php.ini
 
 COPY --from=builder /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
 COPY --from=builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
