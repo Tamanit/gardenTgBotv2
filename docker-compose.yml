@@ -4,7 +4,7 @@ services:
         restart: unless-stopped
         build:
             context: .
-            dockerfile: ./nginx.prod.dockerfile
+            dockerfile: .deploy/nginx/nginx.prod.dockerfile
         ports:
             - 80:80
         environment:
@@ -21,7 +21,7 @@ services:
         restart: unless-stopped
         build:
           context: .
-          dockerfile: ./php.prod.Dockerfile
+          dockerfile: .deploy/php/php.prod.Dockerfile
         volumes:
           - ./www/storage:/var/www/storage
           - ./www/.env:/var/www/.env
