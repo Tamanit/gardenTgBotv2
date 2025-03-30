@@ -15,9 +15,6 @@ RUN apk update && apk add \
 # Установка и настройка расширений для php
 RUN docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype
 RUN docker-php-ext-install -j$(nproc) gd pdo pgsql pdo_pgsql
-ENV CPPFLAGS='-Dphp_strtolower=zend_str_tolower'
-RUN pecl install imagick
-RUN docker-php-ext-enable imagick
 
 WORKDIR /var/www
 COPY ./. ./.
