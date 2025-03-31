@@ -14,7 +14,7 @@ Route::get('test-tg', function () {
    echo Telegram::getMe();
 });
 
-Route::post(env('TELEGRAM_BOT_TOKEN', 'YOUR-BOT-TOKEN') . "/webhook", function () {
+Route::post('webhook/getMessage', function () {
     $update = Telegram::commandsHandler(true);
 
     // Commands handler method returns the Update object.
