@@ -7,12 +7,12 @@ use Telegram\Bot\Commands\Command;
 class TestCommand extends Command
 {
     protected string $name = 'test';
-    protected string $description = 'Start Command to get you started';
+    protected string $description = 'Тестовая команда';
 
     public function handle()
     {
         $this->replyWithMessage([
-            'text' => 'Hey, there! Welcome to our bot!',
+            'text' => 'Hello world!',
         ]);
     }
 }

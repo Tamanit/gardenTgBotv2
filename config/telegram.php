@@ -40,7 +40,8 @@ return [
              */
             'allowed_updates' => null,
             'commands' => [
-                \App\Telegram\Commands\TestCommand::class
+                \App\Telegram\Commands\TestCommand::class,
+                \App\Telegram\Commands\SubCommand::class
             ],
         ],
 
