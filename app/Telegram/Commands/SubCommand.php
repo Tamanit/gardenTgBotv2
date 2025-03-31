@@ -15,7 +15,7 @@ class SubCommand extends Command
     {
         $subKey = $this->argument('subKey', $this->getUpdate()->getMessage()->from->subKey);
 
-        if ($subKey !== env('TELEGRAM_BOT_SUB_KEY')) {
+        if ($subKey != env('TELEGRAM_BOT_SUB_KEY')) {
             $this->replyWithMessage(['text' => 'Ключ не валиден, подписка невозможна!']);
         } else {
             $messageInfo = $this->getUpdate()
