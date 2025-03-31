@@ -17,9 +17,7 @@ class ReviewController extends Controller
      */
 
     public function __construct(
-
         protected NotifyAboutNewReviews $notifyAboutNewReviews,
-
     ) {}
 
     public function sync()

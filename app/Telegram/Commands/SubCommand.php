@@ -2,6 +2,7 @@
 
 namespace App\Telegram\Commands;
 
+use App\Models\TelegramChats;
 use Telegram\Bot\Commands\Command;
 
 class SubCommand extends Command
@@ -14,16 +15,25 @@ class SubCommand extends Command
     {
         $subKey = $this->argument('subKey', $this->getUpdate()->getMessage()->from->subKey);
 
-        $update = $this->getUpdate();
+        if ($subKey !== env('TELEGRAM_BOT_SUB_KEY')) {
+            $this->replyWithMessage(['text' => 'Ключ не валиден, подписка невозможна!']);
+            return false;
+        }
+
+        $messageInfo = $this->getUpdate()
+            ->getMessage()
+            ->toArray();
+
+        $chatId = $messageInfo['chat']['id'];
+
+        TelegramChats::create([
+            'chat_id' => $chatId,
+        ]);
 
         $this->replyWithMessage(
-            ['text' => "{$subKey}" . json_encode($update->getMessage()->toArray())]
+            ['text' => "Вы успешно подписаны на обновления!"]
         );
-//        if ($subKey !== env('TELEGRAM_BOT_SUB_KEY')) {
-//            $this->replyWithMessage(['text' => 'Ключ не валиден, подписка невозможна!']);
-//            return false;
-//        }
 
-
+        return true;
     }
 }

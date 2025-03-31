@@ -4,11 +4,17 @@ namespace App\Services;
 
 use App\Models\Brunch;
 use App\Models\Review;
+use App\Models\TelegramChats;
+use Telegram\Bot\Api;
 
 class ReviewService extends BaseService
 {
     const TWO_GIS_API_URL = 'https://public-api.reviews.2gis.com/2.0/branches/';
     const TWO_GIS_API_REVIEWS = 'reviews';
+
+    public function __construct(
+        protected Api $telegram,
+    ) {}
 
     public function getReviewsFromTwoGis(): array
     {
@@ -60,7 +66,9 @@ class ReviewService extends BaseService
             Review::create([
                 'twoGisId' => $review['id'],
             ]);
-            echo $this->formatMessage($review);
+            $this->sendTelegramMessages(
+                $this->formatMessage($review),
+            );
         }
     }
 
@@ -78,5 +86,16 @@ class ReviewService extends BaseService
             , {$time}</br>
             {$rating} из 5,
             '{$text}'";
+    }
+
+    protected function sendTelegramMessages(string $message): void
+    {
+        $chats = TelegramChats::get();
+        foreach ($chats as $chat) {
+            $this->telegram->sendMessage([
+                'chat_id' => $chat->chat_id,
+                'text' => $message,
+            ]);
+        }
     }
 }
