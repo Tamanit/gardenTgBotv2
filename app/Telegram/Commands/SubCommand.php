@@ -17,23 +17,20 @@ class SubCommand extends Command
 
         if ($subKey !== env('TELEGRAM_BOT_SUB_KEY')) {
             $this->replyWithMessage(['text' => 'Ключ не валиден, подписка невозможна!']);
-            return false;
+        } else {
+            $messageInfo = $this->getUpdate()
+                ->getMessage()
+                ->toArray();
+
+            $chatId = $messageInfo['chat']['id'];
+
+            TelegramChats::create([
+                'chat_id' => $chatId,
+            ]);
+
+            $this->replyWithMessage(
+                ['text' => "Вы успешно подписаны на обновления!"]
+            );
         }
-
-        $messageInfo = $this->getUpdate()
-            ->getMessage()
-            ->toArray();
-
-        $chatId = $messageInfo['chat']['id'];
-
-        TelegramChats::create([
-            'chat_id' => $chatId,
-        ]);
-
-        $this->replyWithMessage(
-            ['text' => "Вы успешно подписаны на обновления!"]
-        );
-
-        return true;
     }
 }
