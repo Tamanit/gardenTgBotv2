@@ -22,4 +22,5 @@ Route::post('webhook/getMessage', function () {
     // to however you want.
 
     return 'ok';
-});
+})
+    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
