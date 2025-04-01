@@ -10,9 +10,9 @@ Route::get('/review/sync', function () {
 
 Route::get('/review/test', [ReviewController::class, 'sync']);
 
-Route::get('test-tg', function () {
-   echo Telegram::getMe();
-});
+//Route::get('test-tg', function () {
+//   echo Telegram::getMe();
+//});
 
 Route::post('webhook/getMessage', function () {
     $update = Telegram::commandsHandler(true);
@@ -26,5 +26,6 @@ Route::post('webhook/getMessage', function () {
     ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
 
 Route::get('/', function () {
-    echo env('TELEGRAM_BOT_SUB_KEY');
+
+//    echo env('TELEGRAM_BOT_SUB_KEY');
 });
