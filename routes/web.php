@@ -24,3 +24,7 @@ Route::post('webhook/getMessage', function () {
     return 'ok';
 })
     ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
+
+Route::get('/', function () {
+    echo env('TELEGRAM_BOT_SUB_KEY');
+});
