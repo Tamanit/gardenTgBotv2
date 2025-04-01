@@ -10,4 +10,6 @@ class Brunch extends Model
     {
         return "https://public-api.reviews.2gis.com/2.0/branches/{$this->two_gis_id}/reviews";
     }
+
+    public $timestamps = false;
 }
