@@ -23,8 +23,10 @@ class SubCommand extends Command
             $this->replyWithMessage([
                 'text'=> 'Ключ не валиден, подписка невозможна!'
             ]);
-        } elseif(TelegramChats::where('chatId', $chatId)->exists()) {
-
+        } elseif (TelegramChats::where('chatId', $chatId)->exists()) {
+            $this->replyWithMessage([
+                'text' => 'Вы уже подписыны'
+            ]);
         } else {
             TelegramChats::create([
                 'chatId' => $chatId,
