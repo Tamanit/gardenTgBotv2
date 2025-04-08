@@ -33,7 +33,7 @@ class TelegramService extends BaseService
         $chats = TelegramChats::get();
         foreach ($chats as $chat) {
             $this->telegram->sendMessage([
-                'chat_id' => $chat->chat_id,
+                'chat_id' => $chat->chatId,
                 'text' => $this->formatMessage($review),
             ]);
         }
