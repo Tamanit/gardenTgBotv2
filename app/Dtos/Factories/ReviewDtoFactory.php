@@ -19,7 +19,7 @@ class ReviewDtoFactory
 
         $dateTime = new \DateTime("{$date} {$time}");
 
-        if (Brunch::where('twoGisId', $data['object']['id'])->existed()) {
+        if (Brunch::where('twoGisId', $data['object']['id'])->exists()) {
             $branch = Brunch::where('twoGisId', $data['object']['id'])->first();
         } else {
             $branchFaked = new Brunch;
