@@ -28,6 +28,6 @@ class SubCommand extends Command
 //        $this->replyWithMessage(
 //            ['text' => $message]
 //        );
-        $this->replyWithMessage(['test' => 'not work!']);
+        $this->replyWithMessage(['text' => 'not work!']);
     }
 }
