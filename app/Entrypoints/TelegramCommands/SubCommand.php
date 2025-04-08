@@ -19,22 +19,22 @@ class SubCommand extends Command
             ->toArray();
         $chatId = $messageInfo['chat']['id'];
 
-//        if ($subKey !== env('TELEGRAM_BOT_SUB_KEY')) {
-//            $this->replyWithMessage([
-//                'text'=> 'Ключ не валиден, подписка невозможна!'
-//            ]);
-//        } elseif(TelegramChats::where('chatId', $chatId)->exists()) {
-//            $this->replyWithMessage([
-//                'text' => 'Вы кже подписаны!'
-//            ]);
-//        } else {
-//            TelegramChats::create([
-//                'chatId' => $chatId,
-//            ]);
-//
-//            $this->replyWithMessage([
-//                'text' => 'Вы подписались'
-//            ]);
-//        }
+        if ($subKey !== env('TELEGRAM_BOT_SUB_KEY')) {
+            $this->replyWithMessage([
+                'text'=> 'Ключ не валиден, подписка невозможна!'
+            ]);
+        } elseif(TelegramChats::where('chatId', $chatId)->exists()) {
+            $this->replyWithMessage([
+                'text' => 'Вы кже подписаны!'
+            ]);
+        } else {
+            TelegramChats::create([
+                'chatId' => $chatId,
+            ]);
+
+            $this->replyWithMessage([
+                'text' => 'Вы подписались'
+            ]);
+        }
     }
 }
