@@ -7,11 +7,11 @@ use App\Models\Brunch;
 
 class BranchDtoFactory
 {
-    public static function create(Brunch $model): BranchDto
+    public static function create(?Brunch $model = null): BranchDto
     {
         return new BranchDto(
-            id: $model->twoGisId,
-            name: $model->name,
+            id: $model->twoGisId ?? 0,
+            name: $model->name ?? 'Неизвестная кофейня',
         );
     }
 }

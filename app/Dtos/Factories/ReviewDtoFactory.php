@@ -19,15 +19,22 @@ class ReviewDtoFactory
 
         $dateTime = new \DateTime("{$date} {$time}");
 
+        if (Brunch::where('twoGisId', $data['object']['id'])->existed()) {
+            $branch = Brunch::where('twoGisId', $data['object']['id'])->first();
+        } else {
+            $branchFaked = new Brunch;
+            $branchFaked->twoGisId = $data['object']['id'];
+            $branchFaked->name = $data['object']['id'];
+            $branch = $branchFaked;
+        }
+
         return new ReviewDto(
             id: $data['id'],
             text: $data['text'],
             rating: $data['rating'],
             sender: $data['user']['name'],
             time: $dateTime,
-            branchDto: BranchDtoFactory::create(
-                Brunch::where('twoGisId', $data['object']['id'])->first()
-            ),
+            branchDto: BranchDtoFactory::create($branch),
         );
     }
 }
