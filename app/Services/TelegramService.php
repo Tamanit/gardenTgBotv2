@@ -15,12 +15,7 @@ class TelegramService extends BaseService
 
     protected function formatMessage(ReviewDto $review): string
     {
-        return "☕ Кофейня: #{$review->branchDto?->name}\n
-        📆 Дата: {$review->time->format('d F Y, H:i')}\n
-        ✏ Оценка: " . str_repeat('⭐', (int)$review->rating) . "({$review->rating} из 5)\n
-        \n
-        📝 Отзыв:\n
-        ```{$review->text}```";
+        return "☕ Кофейня: #{$review->branchDto?->name}\n📆 Дата: {$review->time->format('d F Y, H:i')}\n✏ Оценка: " . str_repeat('⭐', (int)$review->rating) . "({$review->rating} из 5)\n\n📝 Отзыв:\n {$review->text}";
     }
 
     /**
