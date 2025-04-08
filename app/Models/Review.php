@@ -13,4 +13,6 @@ class Review extends Model
     protected $fillable = [
         'twoGisId'
     ];
+
+    public $timestamps = false;
 }

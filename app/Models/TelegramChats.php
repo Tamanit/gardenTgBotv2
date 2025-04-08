@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class TelegramChats extends Model
 {
     protected $fillable = [
-        'chat_id'
+        'chatId'
     ];
+
+    public $timestamps = false;
 }
