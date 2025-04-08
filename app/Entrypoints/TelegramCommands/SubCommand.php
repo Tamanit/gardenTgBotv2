@@ -2,9 +2,7 @@
 
 namespace App\Entrypoints\TelegramCommands;
 
-use App\Services\TelegramService;
-use App\useCases\SubscribeForNotificationAboutNewReviewsUseCase;
-use Telegram\Bot\Api;
+use App\Models\TelegramChats;
 use Telegram\Bot\Commands\Command;
 
 class SubCommand extends Command
@@ -21,12 +19,22 @@ class SubCommand extends Command
             ->toArray();
         $chatId = $messageInfo['chat']['id'];
 
+        if ($subKey !== env('TELEGRAM_BOT_SUB_KEY')) {
+            $this->replyWithMessage([
+                'text'=> 'Ключ не валиден, подписка невозможна!'
+            ]);
+        } elseif(TelegramChats::where('chatId', $chatId)->exists()) {
+            $this->replyWithMessage([
+                'text' => 'Вы кже подписаны!'
+            ]);
+        } else {
+            TelegramChats::create([
+                'chatId' => $chatId,
+            ]);
 
-        $useCase = new SubscribeForNotificationAboutNewReviewsUseCase(new TelegramService(new Api()));
-        $message = $useCase->use($subKey, $chatId);
-
-        $this->replyWithMessage(
-            ['text' => $message]
-        );
+            $this->replyWithMessage([
+                'text' => 'Вы подписались'
+            ]);
+        }
     }
 }
