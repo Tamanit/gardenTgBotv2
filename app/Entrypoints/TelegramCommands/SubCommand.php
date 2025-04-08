@@ -15,18 +15,19 @@ class SubCommand extends Command
 
     public function handle()
     {
-        $subKey = $this->argument('subKey', $this->getUpdate()->getMessage()->from->subKey);
-        $messageInfo = $this->getUpdate()
-            ->getMessage()
-            ->toArray();
-        $chatId = $messageInfo['chat']['id'];
-
-
-        $useCase = new SubscribeForNotificationAboutNewReviewsUseCase(new TelegramService(new Api()));
-        $message = $useCase->use($subKey, $chatId);
-
-        $this->replyWithMessage(
-            ['text' => $message]
-        );
+//        $subKey = $this->argument('subKey', $this->getUpdate()->getMessage()->from->subKey);
+//        $messageInfo = $this->getUpdate()
+//            ->getMessage()
+//            ->toArray();
+//        $chatId = $messageInfo['chat']['id'];
+//
+//
+//        $useCase = new SubscribeForNotificationAboutNewReviewsUseCase(new TelegramService(new Api()));
+//        $message = $useCase->use($subKey, $chatId);
+//
+//        $this->replyWithMessage(
+//            ['text' => $message]
+//        );
+        $this->replyWithMessage(['test' => 'not work!']);
     }
 }
