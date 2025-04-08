@@ -11,10 +11,17 @@ Route::get('/', function () {
 
 
 Route::post('/webhook/getMessage', function () {
-    $updates = Telegram::getWebhookUpdate();
+    $update = Telegram::commandsHandler(true);
+
+    // Commands handler method returns the Update object.
+    // So you can further process $update object
+    // to however you want.
 
     return 'ok';
-})
-    ->withoutMiddleware([VerifyCsrfToken::class]);
+})->withoutMiddleware([VerifyCsrfToken::class]);
 
 Route::get('/review/test', [ReviewController::class, 'sync']);
+
+Route::get('/bot', function () {
+    return "<pre>" . Telegram::bot()->getMe() . "</pre>";
+});
