@@ -2,10 +2,7 @@
 
 namespace App\Entrypoints\TelegramCommands;
 
-use App\Models\TelegramChats;
-use App\Services\TelegramService;
 use App\useCases\SubscribeForNotificationAboutNewReviewsUseCase;
-use Telegram\Bot\Api;
 use Telegram\Bot\Commands\Command;
 
 class SubCommand extends Command
