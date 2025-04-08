@@ -13,9 +13,6 @@ class SubCommand extends Command
     protected string $description = 'Команда для подписаня на рассылку обновлений по отзывам';
     protected string $pattern = '{subKey}';
 
-    public function __construct(
-        protected SubscribeForNotificationAboutNewReviewsUseCase $useCase){}
-
     public function handle()
     {
         $subKey = $this->argument('subKey', $this->getUpdate()->getMessage()->from->subKey);
@@ -24,7 +21,9 @@ class SubCommand extends Command
             ->toArray();
         $chatId = $messageInfo['chat']['id'];
 
-        $message = $this->useCase->use($subKey, $chatId);
+
+        $useCase = new SubscribeForNotificationAboutNewReviewsUseCase(new TelegramService(new Api()));
+        $message = $useCase->use($subKey, $chatId);
 
         $this->replyWithMessage(
             ['text' => $message]
