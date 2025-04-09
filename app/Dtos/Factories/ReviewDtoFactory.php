@@ -4,6 +4,8 @@ namespace App\Dtos\Factories;
 
 use App\Dtos\Models\ReviewDto;
 use App\Models\Brunch;
+use DateInterval;
+use DateTime;
 
 class ReviewDtoFactory
 {
@@ -17,7 +19,8 @@ class ReviewDtoFactory
         preg_match_all('/T\d\d:\d\d/', $dateString, $match);
         $time = trim($match[0][0], 'T');
 
-        $dateTime = new \DateTime("{$date} {$time}");
+        $dateTime = (new DateTime("{$date} {$time}"))
+            ->sub(DateInterval::createFromDateString('2 hours'));
 
         if (Brunch::where('twoGisId', $data['object']['id'])->exists()) {
             $branch = Brunch::where('twoGisId', $data['object']['id'])->first();
