@@ -32,6 +32,7 @@ class TelegramService extends BaseService
             $this->telegram->sendMessage([
                 'chat_id' => $chat->chatId,
                 'text' => $this->formatMessage($review),
+                'type' => 'photo',
             ]);
         }
 
