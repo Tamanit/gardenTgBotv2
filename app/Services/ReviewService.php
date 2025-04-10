@@ -38,7 +38,7 @@ class ReviewService extends BaseService
                     DateTime::createFromFormat(
                         'Y-m-d H:i:s',
                         $existedReviewsWithTwoGisIdKey[$reviewDto->id]['postedAt']
-                    ) <= $reviewDto->time
+                    ) >= $reviewDto->time
             ) {
                 unset($reviewDtos[$key]);
             }
