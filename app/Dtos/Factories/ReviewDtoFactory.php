@@ -7,9 +7,11 @@ use App\Models\Brunch;
 use DateInterval;
 use DateTime;
 
+use function PHPUnit\Framework\isEmpty;
+
 class ReviewDtoFactory
 {
-    public function create(array $data): ReviewDto
+    public function createFromTwoGis(array $data): ReviewDto
     {
         $dateString = $data['date_edited'] ?? $data['date_created'];
         $match = [];
@@ -31,12 +33,22 @@ class ReviewDtoFactory
             $branch = $branchFaked;
         }
 
+        $photosUrls = null;
+        if (!empty($data['photos'])) {
+            foreach ($data['photos'] as $photo) {
+                $photosUrls[] = $photo['preview_urls']['url'];
+            }
+        }
+
         return new ReviewDto(
             id: $data['id'],
             text: $data['text'],
             rating: $data['rating'],
             sender: $data['user']['name'],
             time: $dateTime,
+            resource: 'twoGis',
+            photos: $photosUrls,
+            isEdited: $data['date_edited'] != null,
             branchDto: BranchDtoFactory::create($branch),
         );
     }

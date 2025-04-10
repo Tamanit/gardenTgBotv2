@@ -27,11 +27,21 @@ class TelegramService extends BaseService
     protected function sendTelegramMessages(ReviewDto $review): void
     {
         $chats = TelegramChats::get();
+
         foreach ($chats as $chat) {
             $this->telegram->sendMessage([
                 'chat_id' => $chat->chatId,
                 'text' => $this->formatMessage($review),
             ]);
+        }
+
+        if (!empty($review->photos)) {
+            foreach ($chats as $chat) {
+                $this->telegram->sendMediaGroup([
+                    'chat_id' => $chat->chatId,
+                    'media' => $review->photos,
+                ]);
+            }
         }
     }
 

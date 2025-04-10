@@ -11,7 +11,9 @@ class Review extends Model
     use HasFactory;
 
     protected $fillable = [
-        'twoGisId'
+        'twoGisId',
+        'resource',
+        'postedAt',
     ];
 
     public $timestamps = false;

@@ -44,7 +44,7 @@ class TwoGisApiService extends BaseService
 
         return array_map(
             function ($review) {
-                return $this->reviewDtoFactory->create($review);
+                return $this->reviewDtoFactory->createFromTwoGis($review);
             },
             $reviews
         );

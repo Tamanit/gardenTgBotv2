@@ -6,6 +6,7 @@ use App\Dtos\Models\ReviewDto;
 use App\Models\Brunch;
 use App\Models\Review;
 use App\Models\TelegramChats;
+use DateTime;
 use Telegram\Bot\Api;
 
 class ReviewService extends BaseService
@@ -16,15 +17,30 @@ class ReviewService extends BaseService
      */
     public function removeExistedReviews(array $reviewDtos): array
     {
+        $resource = $reviewDtos[0]->resource;
         $reviewIds = array_map(function (ReviewDto $reviewDto) {
             return $reviewDto->id;
         }, $reviewDtos);
 
-        $existedReviewIds = Review::select('twoGisId')->whereIn('twoGisId', $reviewIds)->get()->toArray();
-        $existedReviewIds = array_column($existedReviewIds, 'twoGisId');
+        $existedReviews = Review::select('twoGisId', 'postedAt')
+            ->whereIn('twoGisId', $reviewIds)
+            ->where('resource', $resource)
+            ->get()
+            ->toArray();
+        $existedReviewIds = array_column($existedReviews, 'twoGisId');
+        $existedReviewsWithTwoGisIdKey = array_column($existedReviewIds, 1, 0);
+
 
         foreach ($reviewDtos as $key => $reviewDto) {
-            if (in_array($reviewDto->id, $existedReviewIds)) {
+            if (
+                (in_array($reviewDto->id, $existedReviewIds)) &&
+                (
+                    $reviewDto->isEdited &&
+                    DateTime::createFromFormat(
+                        'Y-m-d H:i:s',
+                        $existedReviewsWithTwoGisIdKey[$reviewDto->id]->postedAt
+                    ) <= $reviewDto->time)
+            ) {
                 unset($reviewDtos[$key]);
             }
         }
@@ -38,11 +54,18 @@ class ReviewService extends BaseService
      */
     public function storeReviews(array $reviewDtos): array
     {
-        $reviews = [];
         foreach ($reviewDtos as $reviewDto) {
-            $reviews[] = ['twoGisId' => $reviewDto->id];
+            Review::updateOrCeate(
+                [
+                    'twoGisId' => $reviewDto->id
+                ],
+                [
+                    'resource' => $reviewDto->resource,
+                    'postedAt' => $reviewDto->time
+                ]
+            )
+                ->save();
         }
-        Review::insert($reviews);
 
         return $reviewDtos;
     }

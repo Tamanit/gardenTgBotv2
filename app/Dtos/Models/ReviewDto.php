@@ -10,6 +10,9 @@ class ReviewDto
         public string $rating,
         public string $sender,
         public \DateTime $time,
+        public string $resource,
+        public ?array $photos = null,
+        public bool $isEdited = false,
         public ?BranchDto $branchDto = null,
     ) {}
 }
