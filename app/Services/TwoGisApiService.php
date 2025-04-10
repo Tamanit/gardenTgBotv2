@@ -32,7 +32,9 @@ class TwoGisApiService extends BaseService
             'key' => env('TWO_GIS_API_KEY'),
             'locale' => 'ru_RU',
             'limit' => 50,
-            'sort_by' => 'date_created'
+            'sort_by' => 'date_edited',
+            'without_my_first_review' => true,
+
         ];
 
         curl_setopt($oCUrlSession, CURLOPT_URL, self::TWO_GIS_API_REVIEWS . '?' . http_build_query($params));

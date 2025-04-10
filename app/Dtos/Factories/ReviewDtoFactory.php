@@ -35,6 +35,10 @@ class ReviewDtoFactory
 
         $photosUrls = null;
         if (!empty($data['photos'])) {
+            if (count($data['photos']) > 10) {
+                $data['photos'] = array_slice($data['photos'], 0, 10);
+            }
+
             foreach ($data['photos'] as $photo) {
                 $photosUrls[] =[
                     'media' => $photo['preview_urls']['url'],

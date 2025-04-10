@@ -11,12 +11,16 @@ class TelegramService extends BaseService
 {
     public function __construct(
         protected Api $telegram
-    ) {}
+    ) {
+    }
 
     protected function formatMessage(ReviewDto $review): string
     {
-        setlocale( LC_TIME, 'ru_RU', 'russian' );
-        return "☕ Кофейня: #{$review->branchDto?->name}\n📆 Дата: {$review->time->format('d F Y, H:i')}\n✏ Оценка: " . str_repeat('⭐', (int)$review->rating) . "({$review->rating} из 5)\n\n📝 Отзыв:\n {$review->text}";
+        setlocale(LC_TIME, 'ru_RU', 'russian');
+        return "☕ Кофейня: #{$review->branchDto?->name}\n📆 Дата: {$review->time->format('d F Y, H:i')}\n✏ Оценка: " . str_repeat(
+                '⭐',
+                (int)$review->rating
+            ) . "({$review->rating} из 5)\n\n📝 Отзыв:\n {$review->text}";
     }
 
     /**
@@ -28,18 +32,32 @@ class TelegramService extends BaseService
     {
         $chats = TelegramChats::get();
 
-        foreach ($chats as $chat) {
-            $this->telegram->sendMessage([
-                'chat_id' => $chat->chatId,
-                'text' => $this->formatMessage($review),
-            ]);
-        }
+        $reviewText = $this->formatMessage($review);
 
-        if (!empty($review->photos)) {
+        if (!empty($review->photos) and mb_strlen($review->photos) < 1024) {
+            $review->photos[0]['caption'] = $reviewText;
             foreach ($chats as $chat) {
                 $this->telegram->sendMediaGroup([
                     'chat_id' => $chat->chatId,
                     'media' => json_encode($review->photos),
+                ]);
+            }
+        } elseif (!empty($review->photos)) {
+            foreach ($chats as $chat) {
+                $this->telegram->sendMessage([
+                    'chat_id' => $chat->chatId,
+                    'text' => $this->formatMessage($review),
+                ]);
+                $this->telegram->sendMediaGroup([
+                    'chat_id' => $chat->chatId,
+                    'media' => json_encode($review->photos),
+                ]);
+            }
+        } else {
+            foreach ($chats as $chat) {
+                $this->telegram->sendMessage([
+                    'chat_id' => $chat->chatId,
+                    'text' => $this->formatMessage($review),
                 ]);
             }
         }
