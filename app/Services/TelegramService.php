@@ -34,7 +34,7 @@ class TelegramService extends BaseService
 
         $reviewText = $this->formatMessage($review);
 
-        if (!empty($review->photos) and mb_strlen($review->photos) < 1024) {
+        if (!empty($review->photos) and mb_strlen($reviewText) < 1024) {
             $review->photos[0]['caption'] = $reviewText;
             foreach ($chats as $chat) {
                 $this->telegram->sendMediaGroup([
