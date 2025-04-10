@@ -39,7 +39,7 @@ class TelegramService extends BaseService
             foreach ($chats as $chat) {
                 $this->telegram->sendMediaGroup([
                     'chat_id' => $chat->chatId,
-                    'media' => $review->photos,
+                    'media' => json_encode($review->photos),
                 ]);
             }
         }
