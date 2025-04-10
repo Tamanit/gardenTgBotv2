@@ -55,7 +55,7 @@ class ReviewService extends BaseService
     public function storeReviews(array $reviewDtos): array
     {
         foreach ($reviewDtos as $reviewDto) {
-            Review::updateOrCeate(
+            Review::updateOrCreate(
                 [
                     'twoGisId' => $reviewDto->id
                 ],
