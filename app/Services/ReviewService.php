@@ -22,12 +22,13 @@ class ReviewService extends BaseService
             return $reviewDto->id;
         }, $reviewDtos);
 
-        $existedReviews = Review::whereIn('twoGisId', $reviewIds)
+        $existedReviews = Review::select('twoGisId, postedAt')
+            ->whereIn('twoGisId', $reviewIds)
             ->where('resource', $resource)
             ->get()
             ->toArray();
         $existedReviewIds = array_column($existedReviews, 'twoGisId');
-        $existedReviewsWithTwoGisIdKey = array_column($existedReviewIds, 'twoGisId', 0);
+        $existedReviewsWithTwoGisIdKey = array_column($existedReviews, 'twoGisId', 0);
 
         dump($existedReviewIds);
         dd($existedReviewsWithTwoGisIdKey);
