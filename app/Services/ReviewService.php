@@ -22,8 +22,7 @@ class ReviewService extends BaseService
             return $reviewDto->id;
         }, $reviewDtos);
 
-        $existedReviews = Review::select('twoGisId, postedAt')
-            ->whereIn('twoGisId', $reviewIds)
+        $existedReviews = Review::whereIn('twoGisId', $reviewIds)
             ->where('resource', $resource)
             ->get()
             ->toArray();
