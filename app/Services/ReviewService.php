@@ -27,9 +27,11 @@ class ReviewService extends BaseService
             ->where('resource', $resource)
             ->get()
             ->toArray();
+
         $existedReviewIds = array_column($existedReviews, 'twoGisId');
         $existedReviewsWithTwoGisIdKey = array_column($existedReviews, 'twoGisId', 0);
 
+        dump($existedReviews);
         dump($existedReviewIds);
         dd($existedReviewsWithTwoGisIdKey);
         foreach ($reviewDtos as $key => $reviewDto) {
