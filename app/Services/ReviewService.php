@@ -27,7 +27,7 @@ class ReviewService extends BaseService
             ->get()
             ->toArray();
         $existedReviewIds = array_column($existedReviews, 'twoGisId');
-        $existedReviewsWithTwoGisIdKey = array_column($existedReviewIds, 1, 0);
+        $existedReviewsWithTwoGisIdKey = array_column($existedReviewIds, 'twoGisId', 0);
 
         dump($existedReviewIds);
         dd($existedReviewsWithTwoGisIdKey);
