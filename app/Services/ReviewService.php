@@ -31,9 +31,6 @@ class ReviewService extends BaseService
         $existedReviewIds = array_column($existedReviews, 'twoGisId');
         $existedReviewsWithTwoGisIdKey = array_column($existedReviews, null, 'twoGisId');
 
-        dump($existedReviews);
-        dump($existedReviewIds);
-        dd($existedReviewsWithTwoGisIdKey);
         foreach ($reviewDtos as $key => $reviewDto) {
             if (
                 (in_array($reviewDto->id, $existedReviewIds)) &&

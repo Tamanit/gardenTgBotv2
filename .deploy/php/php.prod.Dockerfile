@@ -46,9 +46,14 @@ COPY --from=builder /var/www /var/www
 
 WORKDIR /var/www
 
+# Устанавливаем владельцем папки пользователя www-data
+RUN chown -R www-data:www-data /var/www
+
 # Кешируем маршруты и виды
 RUN php artisan route:cache
 RUN php artisan view:cache
+
+USER www-data
 
 EXPOSE 9000
 CMD ["php-fpm"]
