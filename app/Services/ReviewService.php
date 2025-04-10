@@ -33,13 +33,12 @@ class ReviewService extends BaseService
 
         foreach ($reviewDtos as $key => $reviewDto) {
             if (
-                (in_array($reviewDto->id, $existedReviewIds)) &&
-                (
-                    $reviewDto->isEdited &&
+                in_array($reviewDto->id, $existedReviewIds) &&
+
                     DateTime::createFromFormat(
                         'Y-m-d H:i:s',
                         $existedReviewsWithTwoGisIdKey[$reviewDto->id]['postedAt']
-                    ) <= $reviewDto->time)
+                    ) <= $reviewDto->time
             ) {
                 unset($reviewDtos[$key]);
             }

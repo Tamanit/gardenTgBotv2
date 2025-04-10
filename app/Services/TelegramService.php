@@ -32,7 +32,6 @@ class TelegramService extends BaseService
             $this->telegram->sendMessage([
                 'chat_id' => $chat->chatId,
                 'text' => $this->formatMessage($review),
-                'type' => 'photo',
             ]);
         }
 
@@ -41,6 +40,7 @@ class TelegramService extends BaseService
                 $this->telegram->sendMediaGroup([
                     'chat_id' => $chat->chatId,
                     'media' => json_encode($review->photos),
+                    'type' => 'photo',
                 ]);
             }
         }
