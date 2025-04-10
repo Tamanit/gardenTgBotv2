@@ -36,7 +36,10 @@ class ReviewDtoFactory
         $photosUrls = null;
         if (!empty($data['photos'])) {
             foreach ($data['photos'] as $photo) {
-                $photosUrls[]['media'] = $photo['preview_urls']['url'];
+                $photosUrls[] =[
+                    'media' => $photo['preview_urls']['url'],
+                    'type' => 'photo',
+                ];
             }
         }
 
