@@ -7,6 +7,8 @@ use App\Models\Brunch;
 use DateInterval;
 use DateTime;
 
+use Illuminate\Support\Facades\Hash;
+
 use function PHPUnit\Framework\isEmpty;
 
 class ReviewDtoFactory
@@ -40,7 +42,7 @@ class ReviewDtoFactory
             }
 
             foreach ($data['photos'] as $photo) {
-                $photosUrls[] =[
+                $photosUrls[] = [
                     'media' => $photo['preview_urls']['url'],
                     'type' => 'photo',
                 ];
@@ -53,10 +55,29 @@ class ReviewDtoFactory
             rating: $data['rating'],
             sender: $data['user']['name'],
             time: $dateTime,
-            resource: 'twoGis',
+            resource: '2Гис',
             photos: $photosUrls,
             isEdited: $data['date_edited'] != null,
             branchDto: BranchDtoFactory::create($branch),
+        );
+    }
+
+    public function createFromGoogleMapApi(array $data): ReviewDto
+    {
+        $dateTime = (new DateTime(date('d-m-Y H:i', $data['time'])))->sub(
+            DateInterval::createFromDateString('2 hours')
+        );
+
+        return new ReviewDto(
+            id: Hash::make($data['text']),
+            text: $data['text'],
+            rating: $data['rating'],
+            sender: $data['author_name'],
+            time: $dateTime,
+            resource: 'Google',
+            photos: null,
+            isEdited: false,
+            branchDto: BranchDtoFactory::create($data['brunch']),
         );
     }
 }

@@ -2,25 +2,26 @@
 
 namespace App\useCases;
 
+use App\Services\GoogleMapApiService;
 use App\Services\ReviewService;
 use App\Services\TelegramService;
-use App\Services\TwoGisApiService;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 
-class NotifyAboutNewReviewsUseCase
+class NotifyAboutNewReviewsInGoogleMapUseCase
 {
     public function __construct(
-        protected TwoGisApiService $twoGisApiService,
+        protected GoogleMapApiService $googleMapApiService,
         protected ReviewService $reviewService,
         protected TelegramService $telegramService,
-    ) {}
+    ) {
+    }
 
     /**
      * @throws TelegramSDKException
      */
     public function use(): void
     {
-        $reviews = $this->twoGisApiService->requestReviewsFromApi();
+        $reviews = $this->googleMapApiService->requestReviewsFromApi();
         $reviews = $this->reviewService->removeExistedReviews($reviews);
         $reviews = $this->reviewService->storeReviews($reviews);
         $this->telegramService->notifyAboutReviews($reviews);

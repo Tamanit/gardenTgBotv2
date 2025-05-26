@@ -25,3 +25,9 @@ Route::get('/review/test', [ReviewController::class, 'sync']);
 Route::get('/bot', function () {
     return "<pre>" . Telegram::bot()->getMe() . "</pre>";
 });
+
+Route::get('/google/test', [\App\Services\GoogleMapApiService::class, 'requestReviewsFromApi']);
+
+Route::post('/maps/api/business/fetchReviews', function () {
+    dump('Hello world!');
+});

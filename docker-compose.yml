@@ -48,6 +48,10 @@ services:
                 - '${DB_USERNAME}'
             retries: 3
             timeout: 5s
+    selenium:
+        image: selenium/standalone-chrome
+        networks:
+            - sail
 networks:
     sail:
         driver: bridge
