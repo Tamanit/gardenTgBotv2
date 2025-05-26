@@ -65,13 +65,11 @@ class GoogleMapApiService extends BaseService
 
         curl_close($oCUrlSession);
 
-        dd(
-            array_map(
-                function ($review) {
-                    return $this->reviewDtoFactory->createFromGoogleMapApi($review);
-                },
-                $reviews
-            )
+        return array_map(
+            function ($review) {
+                return $this->reviewDtoFactory->createFromGoogleMapApi($review);
+            },
+            $reviews
         );
     }
 }
